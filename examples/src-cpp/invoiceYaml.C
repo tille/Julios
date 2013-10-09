@@ -15,7 +15,6 @@ void operator >> (const YAML::Node& node, item& item) {
   node["item"] >> id;
   node["unitvalue"] >> valUnit;
   node["units"] >> units;
-
   item.setId(id);
   item.setValUnit(valUnit);
   item.setUnits(units);
@@ -23,13 +22,16 @@ void operator >> (const YAML::Node& node, item& item) {
 
 void operator >> (const YAML::Node& node, invoice &invoice) {
   string id;
+  //string id = node["invoice"];
   node["invoice"] >> id;
   string name;
   node["client"] >> name;
   invoice.setId(id);
   invoice.setName(name);
+  //YAML::Node items;
+
   const YAML::Node& items = node["items"];
-  
+
   for (unsigned i = 0; i < items.size(); i++) {
     item it; 
     items[i] >> it;
@@ -37,8 +39,7 @@ void operator >> (const YAML::Node& node, invoice &invoice) {
   }
 }
 
-invoices&
-parserInvoicesFile(char *filename) {
+invoices& parserInvoicesFile(char *filename) {
   ifstream fin(filename);
 
   invoices* ivcs = new invoices();
@@ -46,7 +47,9 @@ parserInvoicesFile(char *filename) {
   YAML::Parser parser(fin);
   YAML::Node doc;
 
+  //cout << doc.size() << endl;
   parser.GetNextDocument(doc);
+  //cout << doc.size() << endl; 
   for (unsigned i = 0; i < doc.size(); i++) {
     invoice ivc;
     doc[i] >> ivc;
@@ -56,28 +59,22 @@ parserInvoicesFile(char *filename) {
   return *ivcs;
 }
 
-void
-usage(const char* name) {
+void usage(const char* name) {
   cerr << "Usage: " << name << " <yamlfile>.yaml" << endl;
   exit(0);
 }
 
-int
-main(int argc, char *argv[]) {
-
-  if (argc != 2) {
+int main(int argc, char *argv[]) {
+  
+  if (argc != 2)
     usage(argv[0]);
-  }
+  
   invoices& inv = parserInvoicesFile(argv[1]);
   
-  for(i_invoices it = inv.begin();
-      it != inv.end();
-      ++it) {
+  for( i_invoices it = inv.begin(); it != inv.end(); ++it ) {
     cout << "ID: " << (*it).getId() << endl;
     cout << "NAME: " << (*it).getName() << endl;
-    for(i_items itms = (*it).getItems();
-	itms != (*it).getLastItem();
-	++itms) {
+    for( i_items itms = (*it).getItems(); itms != (*it).getLastItem(); ++itms ) {
       cout << setw(5) << setfill(' ') << itms->getId()
 	   << '\t' << fixed << setw(6) << itms->getCostItem()
 	   << '\t' << setw(5) << setfill(' ') << itms->getUnits()
