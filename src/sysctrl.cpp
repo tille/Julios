@@ -7,11 +7,13 @@ using namespace std;
 #include <cstdlib>
 #include "state.h"
 
-// map<string, map<state, map<string,state> > > machines;
+map<string, map<state, map<string,state> > > machines;
 
 void manual_fill(){
-  state node;
-  node_1.set_name();
+  state b;
+  b.set_name("fdsa");
+  cout << b.get_name() << endl;
+
   // machines[name_1][node_1]["aa"] = node_1;
 }
 

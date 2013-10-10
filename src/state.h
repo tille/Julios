@@ -1,5 +1,5 @@
-// #ifndef STATE_H 
-// #define STATE_H
+#ifndef STATE_H
+#define STATE_H
 #include <string>
 #include <vector>
 #include <iostream>
@@ -8,17 +8,19 @@
 using namespace std;
 
 class state{
+  public:
+    state();
+    ~state();
+    
+    void set_name( string name_p );
+    string get_name();
 
- public:
-  state(){
-    cout << "hola mundo" << endl;
-  }
+    void set_description( string description_p );
+    string get_description();
   
-  void set_name();
-
- private:
-  int name;
-  string description;
+  private:
+    string name;
+    string description;
 };
-// 
-// #endif
+
+#endif
