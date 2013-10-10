@@ -1,15 +1,8 @@
 using namespace std;
-#include <yaml-cpp/yaml.h>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <string>
-#include <cstdlib>
-#include "state.h"
 
-typedef map<string, state > edges;
-typedef map<state, edges > states;
-map<string, states > machines;
+#include "state.h"
+#include "shared.h"
+#include <yaml-cpp/yaml.h>
 
 // name_s = name state, name_m = name_machine
 void manual_fill(){
