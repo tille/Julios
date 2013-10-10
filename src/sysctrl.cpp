@@ -7,18 +7,19 @@ using namespace std;
 // name_s = name state, name_m = name_machine
 void manual_fill(){
   string name_s = "A", name_m = "One";
-  state b; b.set_name(name_s);
+  state first_state; 
+  first_state.set_name(name_s);
 
   edges alpha_1;
-  alpha_1["aa"] = b;
+  alpha_1["aa"] = first_state;
 
   states automata_1;
-  automata_1[b] = alpha_1;
+  automata_1[first_state] = alpha_1;
   
   machines[name_m] = automata_1;
   
-  // next state of b with the edge aa
-  state next_state = machines[name_m][b]["aa"];
+  // next state of first_state with the edge aa in the automata name_m
+  state next_state = machines[name_m][first_state]["aa"];
   cout << next_state.get_name() << endl;
 }
 
