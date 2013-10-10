@@ -2,14 +2,13 @@
 CXXFLAGS=-g
 LDFLAGS=-lyaml-cpp
 
-INVOICE_OBJECTS=src/invoiceYaml.o src/invoice.o
+INVOICE_OBJECTS=src/sysctrl.o
 
 init:
 	mkdir bin
 
 compile:
-	$(CXX) -c src/invoice.C -o src/invoice.o
-	$(CXX) -c src/invoiceYaml.C -o src/invoiceYaml.o
+	$(CXX) -w -c src/sysctrl.cpp -o src/sysctrl.o
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
 
 clean:
@@ -17,13 +16,13 @@ clean:
 	rm -rf bin
 
 run:
-	bin/test invoices.yaml
+	bin/test
 
 run-all:
+	rm -rf bin
 	mkdir bin
-	$(CXX) -c src/invoice.C -o src/invoice.o
-	$(CXX) -c src/invoiceYaml.C -o src/invoiceYaml.o
+	$(CXX) -w -c src/sysctrl.cpp -o src/sysctrl.o
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
-	bin/test examples/invoices.yaml
+	bin/test
 	rm -f src/*.o src/*~ *.o *~ *.yaml 
 	rm -rf bin

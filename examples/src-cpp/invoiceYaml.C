@@ -84,3 +84,10 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+
+// MAXN = max aumtomatas available
+// MAXN = max number of nodes per automata
+// vector<automata> tales;
+// vector<edge > automata[MAXN][MAXM];
+// automata[1].graph[1][1]
+// automata[1][A][1]
