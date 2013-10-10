@@ -17,7 +17,11 @@ class state{
 
     void set_description( string description_p );
     string get_description();
-  
+    
+    bool operator < ( const state &that ) const {
+      return true;
+    }
+
   private:
     string name;
     string description;

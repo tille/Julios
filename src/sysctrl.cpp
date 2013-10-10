@@ -7,14 +7,26 @@ using namespace std;
 #include <cstdlib>
 #include "state.h"
 
-map<string, map<state, map<string,state> > > machines;
+typedef map<string, state > edges;
+typedef map<state, edges > states;
+map<string, states > machines;
 
+// name_s = name state, name_m = name_machine
 void manual_fill(){
-  state b;
-  b.set_name("fdsa");
-  cout << b.get_name() << endl;
+  string name_s = "A", name_m = "One";
+  state b; b.set_name(name_s);
 
-  // machines[name_1][node_1]["aa"] = node_1;
+  edges alpha_1;
+  alpha_1["aa"] = b;
+
+  states automata_1;
+  automata_1[b] = alpha_1;
+  
+  machines[name_m] = automata_1;
+  
+  // next state of b with the edge aa
+  state next_state = machines[name_m][b]["aa"];
+  cout << next_state.get_name() << endl;
 }
 
 void usage(const char* name) {
