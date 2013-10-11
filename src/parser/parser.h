@@ -5,6 +5,9 @@
 #include "../../lib/stdc++.h"
 #include <yaml-cpp/yaml.h>
 
+#include "../state/state.h"
+#include "../shared.h"
+
 using namespace std;
 
 class parser {
@@ -12,8 +15,8 @@ class parser {
     parser();
     ~parser();
 
-    void parser_yamfile(char *filename);
-    
+    map<string, states > parser_yamfile(char *filename);
+        
     void parser_IO();
     void parser_sysctrl();
     void parser_state();

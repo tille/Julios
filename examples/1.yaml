@@ -7,13 +7,18 @@
   delta:
     - node: A
       trans:
-        - in: a next: B
-        - in: b next: A
+        - in: a 
+          next: B
+        - in: b 
+          next: A
     - node: B
       trans:
-        - in: a next: B
-        - in: b next: A
-        - in: c next: C
+        - in: a 
+          next: B
+        - in: b 
+          next: A
+        - in: c 
+          next: C
     - node: C
       trans:
 - automata: Two

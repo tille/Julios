@@ -14,11 +14,11 @@ compile:
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
 
 clean:
-	rm -f src/*.o src/*~ *.o *~ *.yaml 
+	rm -f src/*.o src/*~ *.o *~ *.yaml src/parser/*.o src/state/*.o
 	rm -rf bin
 
 run:
-	bin/test examples/invoices.yaml
+	bin/test examples/1.yaml
 
 run-all:
 	rm -rf bin

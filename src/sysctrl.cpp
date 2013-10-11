@@ -4,28 +4,25 @@ using namespace std;
 #include "shared.h"
 #include "parser/parser.h"
 
-map<string, states > machines;
-
-// name_s = name state, name_m = name_machine
 void manual_fill(char *file){
   parser p;
-  p.parser_yamfile(file);
+  map<string, states > machines = p.parser_yamfile(file);
   
-  string name_s = "A", name_m = "One";
-  state first_state; 
-  first_state.set_name(name_s);
-
-  edges alpha_1;
-  alpha_1["aa"] = first_state;
-
-  states automata_1;
-  automata_1[first_state] = alpha_1;
-  
-  machines[name_m] = automata_1;
-  
-  // next state of first_state with the edge aa in the automata name_m
-  state next_state = machines[name_m][first_state]["aa"];
-  cout << next_state.get_name() << endl;
+  // string name_s = "A", name_m = "One";
+  // state first_state; 
+  // first_state.set_name(name_s);
+  // 
+  // edges alpha_1;
+  // alpha_1["aa"] = first_state;
+  // 
+  // states automata_1;
+  // automata_1[first_state] = alpha_1;
+  // 
+  // machines[name_m] = automata_1;
+  // 
+  // // next state of first_state with the edge aa in the automata name_m
+  // state next_state = machines[name_m][first_state]["aa"];
+  // cout << next_state.get_name() << endl;
 }
 
 void usage(const char* name) {

@@ -23,22 +23,76 @@ parser::~parser() { }
 //   }
 // }
 
-void parser::parser_yamfile(char *filename) {
+// name_s = name state, name_m = name_machine
+map<string, states > parser::parser_yamfile(char *filename) {
   ifstream fin(filename);
 
   YAML::Parser parser(fin);
   YAML::Node doc;
 
   parser.GetNextDocument(doc);
-  // cout << doc.size() << endl;
+  
+  
+  // fdsafdsaf
+  map<string, states > machines;
+  map<string, state > matches;
+  edges alpha;
 
-  // for (unsigned i = 0; i < doc.size(); i++) {
-  //   invoice ivc;
-  //   doc[i] >> ivc;
-  //   ivcs->push_back(ivc);
-  // }
+  // edges alpha_1;
+  // alpha_1["aa"] = first_state;
   // 
-  // return *ivcs;
+  // states automata_1;
+  // automata_1[first_state] = alpha_1;
+  // 
+  // machines[name_m] = automata_1;
+  // 
+  // // next state of first_state with the edge aa in the automata name_m
+  // state next_state = machines[name_m][first_state]["aa"];
+  // cout << next_state.get_name() << endl;
+
+  for (unsigned i = 0; i < doc.size(); i++) {
+    matches.clear();
+    string name_m;
+    doc[i]["automata"] >> name_m;
+    states automata;
+    
+    const YAML::Node& states_yaml = doc[i]["states"];
+    for (int i = 0; i < states_yaml.size(); i++) {
+      string act_name;
+      state act;
+
+      states_yaml[i] >> act_name;
+      act.set_name(act_name);
+      matches[act_name] = act;
+    }
+    
+    const YAML::Node& delta = doc[i]["delta"];
+    for (int i = 0; i < delta.size(); i++) {
+      string act_name; alpha.clear();
+      delta[i]["node"] >> act_name;
+      state act = matches[act_name];
+      
+      const YAML::Node& trans = delta[i]["trans"];
+      for (int j = 0; j < trans.size(); j++) {
+        string symbol, next;
+        trans[i]["in"] >> symbol;
+        trans[i]["next"] >> next;
+        alpha[symbol] = matches[next];
+      }
+      
+      automata[act] = alpha;
+    }
+    
+    machines[name_m] = automata;
+    
+    if(i==0){
+      state ini = matches["A"];
+      state next_state = machines["One"][ini]["b"];
+      cout << next_state.get_name() << endl;
+    }
+  }
+
+  return machines;
 }
 
 void parser::parser_IO(){
