@@ -1,1 +1,5 @@
 -I/usr/local/include -L/usr/local/lib
+
+make init
+make compile
+make run

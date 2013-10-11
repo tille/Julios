@@ -1,11 +1,16 @@
 using namespace std;
 
-#include "state.h"
+#include "state/state.h"
 #include "shared.h"
-#include <yaml-cpp/yaml.h>
+#include "parser/parser.h"
+
+map<string, states > machines;
 
 // name_s = name state, name_m = name_machine
-void manual_fill(){
+void manual_fill(char *file){
+  parser p;
+  p.parser_yamfile(file);
+  
   string name_s = "A", name_m = "One";
   state first_state; 
   first_state.set_name(name_s);
@@ -29,9 +34,9 @@ void usage(const char* name) {
 }
 
 int main(int argc, char *argv[]) {
-  // if (argc != 2) 
-  //   usage(argv[0]);
+  if (argc != 2) 
+    usage(argv[0]);
   
-  manual_fill();
+  manual_fill(argv[1]);
   return 0;
 }

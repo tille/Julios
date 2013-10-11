@@ -8,6 +8,5 @@ using namespace std;
 
 typedef map<string, state > edges;
 typedef map<state, edges > states;
-map<string, states > machines;
 
 #endif

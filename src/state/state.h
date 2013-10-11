@@ -2,7 +2,7 @@
 #define STATE_H
 
 // runs by default in gcc >= 4.7, https://gist.github.com/eduarc/6022859
-#include "../lib/stdc++.h"
+#include "../../lib/stdc++.h"
 
 using namespace std;
 
