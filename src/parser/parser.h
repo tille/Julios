@@ -16,10 +16,13 @@ class parser {
     ~parser();
 
     map<string, states > parser_yamfile(char *filename);
-        
+
     void parser_IO();
     void parser_sysctrl();
     void parser_state();
+
+  private:
+    state ini, fn;
 };
 
 #endif
