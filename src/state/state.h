@@ -3,6 +3,9 @@
 
 // runs by default in gcc >= 4.7, https://gist.github.com/eduarc/6022859
 #include "../../lib/stdc++.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -29,16 +32,19 @@ class state{
     void append_input_pipe( int imputPipe );
     void append_output_pipe( int outputPipe );
 
-    int get_pid();
-    int get_ppid(); 
+    pid_t get_pid();
+    pid_t get_ppid(); 
+
+    void run();
 
   private:
+    pid_t pid;
     string name;
     string description;
     vector <int> inputPipes;
     vector <int> outputPipes;
     int sysPipeOut, sysPipeIn;
-    bool isStar, isFinal;
+    bool isStart, isFinal;
 };
 
 #endif

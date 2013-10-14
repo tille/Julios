@@ -3,6 +3,7 @@
 state::state() { 
   this->inputPipes = {};
   this->outputPipes = {};
+  run();
 }
 
 state::~state() { }
@@ -23,42 +24,52 @@ string state::get_description(){
   return description;
 }
 
-void set_is_final( bool isFinal ){
+void state::set_is_final( bool isFinal ){
   this->isFinal = isFinal;
 }
 
-bool get_is_final(){
+bool state::state::get_is_final(){
   return this->isFinal;
 }
   
-void set_is_start( bool isStart ){
+void state::set_is_start( bool isStart ){
   this->isStart = isStart;
 }
 
-bool get_is_start(){
+bool state::get_is_start(){
   return this->isStart;
 }
    
-void set_sys_pipe_in( int sysPipeIn ){
+void state::set_sys_pipe_in( int sysPipeIn ){
   this->sysPipeIn = sysPipeIn;
 }
 
-void set_sys_pipe_out( int sysPipeOut ){
+void state::set_sys_pipe_out( int sysPipeOut ){
   this->sysPipeOut = sysPipeOut;
 }
   
-void append_input_pipe( int imputPipe ){
+void state::append_input_pipe( int inputPipe ){
   this->inputPipes.push_back(inputPipe);
 }
 
-void append_output_pipe( int outputPipe ){
-  this->outputPipes.push_back(outputPipe)
+void state::append_output_pipe( int outputPipe ){
+  this->outputPipes.push_back(outputPipe);
 }
   
-void get_pid(){
+pid_t state::get_pid(){
   return getpid();
 }
 
-void get_ppid(){
+pid_t state::get_ppid(){
   return getppid();
+}
+
+void state::run(){
+  this->pid = fork();
+  
+  if (pid >= 0){
+     if(pid == 0){
+	cout << get_pid();
+     }
+  }
 }
