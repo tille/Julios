@@ -63,6 +63,7 @@ while True:
 			data = yaml.load(data)
 
 			if 'codterm' in data.keys() and (data['codterm'] == 1 or data['codterm'] == 0):
+				print data
 				respAcept.append(data)
 				if len(respAcept) == len (automs):
 					print Parsers.dumpAcpMs(respAcept, lastMesg)
