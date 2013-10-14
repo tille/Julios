@@ -1,4 +1,4 @@
-import select, os, Parsers, yaml
+import select, os, Parsers, yaml, time
 from multiprocessing import Process, Pipe
         
 class Automata:
@@ -76,38 +76,52 @@ class Node (Process):
 		self.isStart = isStart
 		self.isFinal = isFinal	
 		self.delta = delta
+		self.lastSend = {}
 	
 	def run (self):
 		running = True
+
 		while running:
-			a = []
+			pipes = []
 			for items in self.input:
-				a.append(items[0])
+				pipes.append(items[0])
 
-			#if self.isStart:
-			#	a.append(self.scrtPipeIn)
+			if self.isStart:
+				pipes.append(self.scrtPipeIn)
 
-			inputready,outputready,exceptready = select.select(a , [], [])
+			inputready, outputready, exceptready = select.select(pipes , [], [])
 
-			for s in inputready: 
+			for s in inputready: 				
+				if s == self.scrtPipeIn:
+					data = s.recv()
+					self.comData = Parsers.parseStateCom(data)
+					cadena = self.comData['rest']
+					nextNode = self.makeTransition(cadena)
+					self.sendData(nextNode, yaml.dump(self.comData))
 				for ins in self.input:
 					if s == ins[0]:
 						data = s.recv()
 						self.comData = Parsers.parseStateCom(data)
-						print self.comData
 						cadena = self.comData['rest']
 						nextNode = self.makeTransition(cadena)
 						if nextNode == "reject" :
-							print 'reject'
-							#print self.comData
-							#self.scrtPipeOut.dumpRes(Parsers.parseRes({'msgtype':'reject', 'reject': [{'automata':self.autom, 'msg':self.data, 'pos':'?'}]}))
+							send = {'codterm':1,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
+							if send == self.lastSend:
+								pass
+							else:
+								self.lastSend = send
+								self.scrtPipeOut.send(yaml.dump(send))
 						elif nextNode == "accept":
-							print 'accept'
-							#print self.comData
-							#self.scrtPipeOut.dumpRes(Parsers.parseRes({'msgtype':'accept', 'accept': [{'automata':self.autom, 'msg':self.data}]}))
-						else:
-							#print self.comData
+							send = {'codterm':0,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
+							if send == self.lastSend:
+								pass
+							else:
+								self.lastSend = send
+								self.scrtPipeOut.send(yaml.dump(send))
+						else:						
 							self.sendData(nextNode, yaml.dump(self.comData))
+				
+						
 		
 	def sendData(self, node, data):
 		for nodes in self.output:
@@ -122,6 +136,8 @@ class Node (Process):
 
 		for nodes in self.delta:
  			if nodes['node'] == state:
+				if not nodes['trans']:
+					return "reject"
 				for changes in nodes['trans']:
 					chain = changes ['in']
 					if chain == input[:len(chain)]:
@@ -135,6 +151,6 @@ class Node (Process):
 	def makeTransition(self, input):
 		return self.deltaFun(self.name, input)
 
-	def addScrtPipe(input, output):
-		self.scrtPipeIn = output
-		self.scrtPipeOut = input
+	def addScrtPipe(self, input, output):
+		self.scrtPipeIn = input
+		self.scrtPipeOut = output

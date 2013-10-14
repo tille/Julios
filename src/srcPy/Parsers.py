@@ -41,3 +41,26 @@ def parseCmd(cmd):
 
 def parseStateCom(data):
 	return yaml.load(data)
+
+def dumpStateCom(data):
+	return yaml.dump(data)
+
+def dumpAcpMs(data, msg):
+	ans = []
+	reject = {'msgtype':'reject', 'reject':[]}
+	accept = {'msgtype':'accept', 'accept':[]}
+	for items in data:
+		if items['codterm'] == 1:
+			reject['reject'].append({'automata': items['autom'], 'msg':msg})
+		elif items['codterm'] == 0:
+			accept['accept'].append({'automata': items['autom'], 'msg':msg})
+
+	if not len(reject['reject']) == 0:
+		ans.append(reject)
+	
+	if not len(accept['accept']) == 0:
+		ans.append(accept)
+
+	return yaml.dump(ans, default_flow_style=False)	
+		
+		
