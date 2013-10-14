@@ -4,8 +4,9 @@ using namespace std;
 #include "shared.h"
 #include "parser/parser.h"
 
-void manual_fill(char *file){
+void build_graph(char *file){
   parser p;
+
   map<string, states> machines = p.parser_yamfile(file);
   map<string, state> init = p.get_init();
   vector<string> str_names = p.get_automatas_names();
@@ -31,6 +32,6 @@ int main(int argc, char *argv[]) {
   if (argc != 2) 
     usage(argv[0]);
   
-  manual_fill(argv[1]);
+  build_graph(argv[1]);
   return 0;
 }

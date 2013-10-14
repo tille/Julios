@@ -13,7 +13,10 @@ compile:
 	$(CXX) -w -c src/sysctrl.cpp -o src/sysctrl.o
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
 
-clean:
+runPy:
+	python src/srcPy/Main.py
+
+clean:	
 	rm -f src/*.o src/*~ *.o *~ *.yaml src/parser/*.o src/state/*.o
 	rm -rf bin
 
@@ -23,9 +26,10 @@ run:
 run-all:
 	rm -rf bin
 	mkdir bin
+	$(CXX) -I/usr/local/include -w -c src/state/state.cpp -o src/state.o
+	$(CXX) -I/usr/local/include -w -c src/parser/parser.cpp -o src/parser.o
 	$(CXX) -w -c src/sysctrl.cpp -o src/sysctrl.o
-	$(CXX) -I/usr/local/include -w -c src/state/state.cpp -o src/state/state.o
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
-	bin/test
-	rm -f src/*.o src/*~ *.o *~ *.yaml 
+	bin/test examples/1.yaml
+	rm -f src/*.o src/*~ *.o *~ *.yaml src/parser/*.o src/state/*.o
 	rm -rf bin
