@@ -18,5 +18,6 @@ struct classcomp {
 
 typedef map<string, state > edges;
 typedef map<state, edges, classcomp > states;
+typedef map<state, bool, classcomp > is_final;
 
 #endif

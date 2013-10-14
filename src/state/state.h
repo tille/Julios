@@ -16,7 +16,7 @@ class state{
     
     void set_description( string description_p );
     string get_description();
-    
+
   private:
     string name;
     string description;

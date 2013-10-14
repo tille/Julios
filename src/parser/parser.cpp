@@ -43,9 +43,36 @@ map<string, states > parser::parser_yamfile(char *filename) {
     }
 
     machines[name_m] = automata;
+
+    string st_name;
+    doc[i]["start"] >> st_name;
+    this->init_states[name_m] = matches[st_name];
+    this->names.push_back(name_m);
+    
+    const YAML::Node& final_states = doc[i]["final"];
+    is_final final;
+    
+    for( int k = 0; k < final_states.size(); ++k ){
+      final_states[k] >> st_name;
+      final[matches[st_name]] = true;
+    }
+
+    this->final_states[name_m] = final;
   }
 
   return machines;
+}
+
+map<string, is_final> parser::get_final_states(){
+  return final_states;
+}
+
+map<string, state> parser::get_init(){
+  return init_states;
+}
+
+vector<string> parser::get_automatas_names(){
+  return names;
 }
 
 void parser::parser_IO(){

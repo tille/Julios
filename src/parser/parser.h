@@ -15,14 +15,20 @@ class parser {
     parser();
     ~parser();
 
-    map<string, states > parser_yamfile(char *filename);
+    map<string, states> parser_yamfile(char *filename);
+    map<string, state> get_init();
+    vector<string> get_automatas_names();
+    map<string, is_final> get_final_states();
 
     void parser_IO();
     void parser_sysctrl();
     void parser_state();
+    
 
   private:
-    state ini, fn;
+    map<string, state> init_states;
+    map<string, is_final> final_states;
+    vector<string> names;
 };
 
 #endif
