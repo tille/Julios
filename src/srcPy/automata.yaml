@@ -1,0 +1,189 @@
+- automata: One
+  description: "First automata"
+  alpha: [a,b,c]
+  states: [A,B,C]
+  start: A
+  final: [C]
+  delta:
+   - node: A
+     trans:
+      - in: a
+        next: B
+      - in: b
+        next: A
+   - node: B
+     trans:
+      - in: a
+        next: B
+      - in: b
+        next: A
+      - in: c
+        next: C
+   - node: C
+     trans:
+- automata: Two
+  description: "Second automata"
+  alpha: [aa,bb,cc]
+  states: [A,B]
+  start: A
+  final: [A,B]
+  delta:
+   - node: A
+     trans:
+      - in: aa
+        next: B
+      - in: bb
+        next: A
+      - in: cc
+        next: B
+   - node: B
+     trans:
+      - in: aa
+        next: B
+      - in: bb
+        next: A
+
+#[
+# {
+#	'states': ['A', 'B', 'C'], 
+#	'start': 'A', 
+#	'automata': 'One', 
+#	'description':'First automata', 
+#	'delta': 
+#		[
+#		 {
+#			'node': 'A', 
+#			'trans': 
+#				[
+#				 {'in': 'a', 'next': 'B'}, 
+#				 {'in': 'b', 'next': 'A'}
+#				]
+#		 }, 
+#		 {
+#			'node': 'B', 
+#			'trans': 
+#				[
+#				 {'in': 'a', 'next': 'B'}, 
+#				 {'in': 'b', 'next': 'A'}, 
+#				 {'in': 'c', 'next': 'C'}
+#				]
+#		 }, 
+#		 {
+#			'node': 'C', 
+#			'trans': None
+#		 }
+#		], 
+#	'alpha': ['a', 'b', 'c'], 
+#	'final': ['C']
+# }, 
+# {
+#	'states': ['A', 'B'], 
+#	'start': 'A', 
+#	'automata': 'Two', 
+#	'description': 
+#	'Second automata', 
+#	'delta': 
+#		[
+#		 {
+#			'node': 'A', 
+#			'trans': 
+#				[
+#				 {'in': 'aa', 'next': 'B'}, 
+#				 {'in': 'bb', 'next': 'A'}, 
+#				 {'in': 'cc', 'next': 'B'}
+#				]
+#		 }, 
+#		 {
+#			'node': 'B', 
+#			'trans': 
+#				[
+#				 {'in': 'aa', 'next': 'B'}, 
+#				 {'in': 'bb', 'next': 'A'}
+#				]
+#		 }
+#		], 
+#	'alpha': ['aa', 'bb', 'cc'], 
+#	'final': ['A', 'B']
+# }
+#]
+
+
+
+
+
+
+
+#{
+#	'A': 
+#		{
+#		 'out': [<read-write Connection, handle 9>, <read-write Connection, handle 13>], 
+#		 'in' : [<read-write Connection, handle 6>, <read-write Connection, handle 8>]}, 
+#
+#	'C': 
+#		{
+#		 'out': [<read-write Connection, handle 15>], 
+#		 'in': []
+#		}, 
+#
+#	'B': 
+#		{
+#		 'out': [<read-write Connection, handle 7>, <read-write Connection, handle 11>], 
+#		 'in': [<read-write Connection, handle 10>, <read-write Connection, handle 12>, <read-write Connection, handle 14>]
+#		}
+#}
+
+
+# {
+#       'states': ['A', 'B', 'C'], 
+#       'start': 'A', 
+#       'automata': 'One', 
+#       'description':'First automata', 
+#       'delta': 
+#               [
+#                {
+#                       'node': 'A', 
+#                       'trans': 
+#                               [
+#                                {'in': 'a', 'next': 'B'}, 
+#                                {'in': 'b', 'next': 'A'}
+#                               ]
+#                }, 
+#                {
+#                       'node': 'B', 
+#                       'trans': 
+#                               [
+#                                {'in': 'a', 'next': 'B'}, 
+#                                {'in': 'b', 'next': 'A'}, 
+#                                {'in': 'c', 'next': 'C'}
+#                               ]
+#                }, 
+#                {
+#                       'node': 'C', 
+#                       'trans': None
+#                }
+#               ], 
+#       'alpha': ['a', 'b', 'c'], 
+#       'final': ['C']
+# }, 
+
+
+#{
+#	'A': 
+#		{
+#			'out': [(<read-write Connection, handle 6>, 'B'), (<read-write Connection, handle 8>, 'A')], 
+#			'in': [(<read-write Connection, handle 9>, 'A'), (<read-write Connection, handle 13>, 'B')]
+#		}, 
+#
+#	'C': 
+#		{
+#			'out': [], 
+#			'in': [(<read-write Connection, handle 15>, 'B')]
+#		}, 
+#	
+#	'B': 
+#		{
+#			'out': [(<read-write Connection, handle 10>, 'B'), (<read-write Connection, handle 12>, 'A'), (<read-write Connection, handle 14>, 'C')], 
+#			'in': [(<read-write Connection, handle 7>, 'A'), (<read-write Connection, handle 11>, 'B')]
+#		}
+#}
+
