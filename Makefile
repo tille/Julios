@@ -14,7 +14,7 @@ compile:
 	$(CXX) -o bin/test $(INVOICE_OBJECTS) $(LDFLAGS)
 
 runPy:
-	python src/srcPy/Main.py
+	python src/srcPy/sysctrl.py
 
 clean:	
 	rm -f src/*.o src/*~ *.o *~ *.yaml src/parser/*.o src/state/*.o
