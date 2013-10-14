@@ -77,50 +77,67 @@ class Node (Process):
 		self.isFinal = isFinal	
 		self.delta = delta
 		self.lastSend = {}
-	
+			
 	def run (self):
 		running = True
-
-		while running:
-			pipes = []
-			for items in self.input:
-				pipes.append(items[0])
-
-			if self.isStart:
-				pipes.append(self.scrtPipeIn)
-
-			inputready, outputready, exceptready = select.select(pipes , [], [])
-
-			for s in inputready: 				
-				if s == self.scrtPipeIn:
-					data = s.recv()
-					self.comData = Parsers.parseStateCom(data)
-					cadena = self.comData['rest']
-					nextNode = self.makeTransition(cadena)
-					self.sendData(nextNode, yaml.dump(self.comData))
-				for ins in self.input:
-					if s == ins[0]:
+		try:
+			while running:
+				pipes = []
+				for items in self.input:
+					pipes.append(items[0])
+		
+				if self.isStart:
+					pipes.append(self.scrtPipeIn)
+	
+				inputready, outputready, exceptready = select.select(pipes , [], [])
+	
+				for s in inputready: 				
+					if s == self.scrtPipeIn:
 						data = s.recv()
 						self.comData = Parsers.parseStateCom(data)
 						cadena = self.comData['rest']
 						nextNode = self.makeTransition(cadena)
-						if nextNode == "reject" :
-							send = {'codterm':1,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
-							if send == self.lastSend:
-								pass
-							else:
-								self.lastSend = send
-								self.scrtPipeOut.send(yaml.dump(send))
-						elif nextNode == "accept":
+						if nextNode == "accept":
 							send = {'codterm':0,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
 							if send == self.lastSend:
 								pass
 							else:
 								self.lastSend = send
 								self.scrtPipeOut.send(yaml.dump(send))
-						else:						
+						elif nextNode == "reject":
+							send = {'codterm':1, 'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
+							if send == self.lastSend:
+								pass
+							else:
+								self.lastSend = send
+								self.scrtPipeOut.send(yaml.dump(send))
+						else:
 							self.sendData(nextNode, yaml.dump(self.comData))
-				
+					for ins in self.input:
+						if s == ins[0]:
+							data = s.recv()
+							self.comData = Parsers.parseStateCom(data)
+							cadena = self.comData['rest']
+							nextNode = self.makeTransition(cadena)
+							if nextNode == "reject" :
+								send = {'codterm':1,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
+								if send == self.lastSend:
+									pass
+								else:
+									self.lastSend = send
+									self.scrtPipeOut.send(yaml.dump(send))
+							elif nextNode == "accept":
+								send = {'codterm':0,'reccog':self.comData['recog'],'rest':self.comData['rest'], 'autom':self.autom}
+								if send == self.lastSend:
+									pass
+								else:
+									self.lastSend = send
+									self.scrtPipeOut.send(yaml.dump(send))
+							else:						
+								self.sendData(nextNode, yaml.dump(self.comData))
+		except:
+			send = {'codterm' : 2, 'pid': self.pid, 'rest':'broken pipe on function sndMsg'}
+			self.scrtPipeOut.send(yaml.dump(send))			
 						
 		
 	def sendData(self, node, data):
