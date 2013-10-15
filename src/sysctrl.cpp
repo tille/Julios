@@ -21,6 +21,7 @@ void build_graph(char *file){
   act = machines[name][act]["c"];
   cout << act.get_name() << endl;
   cout << "Es estado de fin: " << final[name][act] << endl;
+  act.run();
 }
 
 void usage(const char* name) {
@@ -31,7 +32,8 @@ void usage(const char* name) {
 int main(int argc, char *argv[]) {
   if (argc != 2) 
     usage(argv[0]);
-  
+ 
   build_graph(argv[1]);
+  //while(1){}
   return 0;
 }

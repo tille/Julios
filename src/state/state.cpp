@@ -1,9 +1,12 @@
 #include "state.h"
 
+#include <sys/types.h>
+#include <signal.h>
+
 state::state() { 
   this->inputPipes = {};
   this->outputPipes = {};
-  run();
+  //run();
 }
 
 state::~state() { }
@@ -66,10 +69,19 @@ pid_t state::get_ppid(){
 
 void state::run(){
   this->pid = fork();
-  
-  if (pid >= 0){
-     if(pid == 0){
-	cout << get_pid();
-     }
+ 
+  int coun = 0;
+ 
+  switch(pid){
+    case -1:
+      cout << "Error!";
+      break;
+    case 0:
+      //int coun = 0;
+      while(1){ if(coun == 1000000){ cout << get_pid(); coun = 0;} coun++; }
+      break;
+    default:
+      //kill(get_pid(), SIGTERM);
+      break;
   }
 }
