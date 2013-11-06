@@ -51,7 +51,10 @@ while True:
 								data = automata.automInfo()
 					print Parsers.dumpInfo(data)	
 				elif com ['cmd'] == 'stop':
-					pass
+					for aut in automs:
+						for nod in aut.nodeList:
+							nod.close()
+							del nod
 				else:
 					info = {'msgtype':'error', 'error':{'where': 'Pid: '+str(os.getpid()), 'cause': "broken pipe on function sndMsg"}}
 					print yaml.dump(info, default_flow_style=False)
