@@ -19,9 +19,14 @@ void build_graph(char *file){
   ini = init[name];
   act = machines[name][ini]["a"];
   act = machines[name][act]["c"];
+
   cout << act.get_name() << endl;
   cout << "Es estado de fin: " << final[name][act] << endl;
   act.run();
+}
+
+void createPipes(){
+	//Creates Pipes from delta function in map
 }
 
 void usage(const char* name) {

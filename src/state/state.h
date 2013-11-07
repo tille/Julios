@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define MAX_BUFF 512
+
 using namespace std;
 
 class state{

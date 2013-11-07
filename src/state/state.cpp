@@ -52,11 +52,11 @@ void state::set_sys_pipe_out( int sysPipeOut ){
 }
   
 void state::append_input_pipe( int inputPipe ){
-  this->inputPipes.push_back(inputPipe);
+  this->inputPipes.insert(this->inputPipes.end(), inputPipe);
 }
 
 void state::append_output_pipe( int outputPipe ){
-  this->outputPipes.push_back(outputPipe);
+  this->outputPipes.insert(this->outputPipes.end() , outputPipe);
 }
   
 pid_t state::get_pid(){
@@ -70,18 +70,37 @@ pid_t state::get_ppid(){
 void state::run(){
   this->pid = fork();
  
-  int coun = 0;
+  if (this->pid == -1){}
+
+  if (this->pid == 0){//Child Process
+    int input_num = 0;
+    char *data [MAX_BUFF];
+    fd_set input;
+    FD_ZERO(&input);
  
-  switch(pid){
-    case -1:
-      cout << "Error!";
-      break;
-    case 0:
-      //int coun = 0;
-      while(1){ if(coun == 1000000){ cout << get_pid(); coun = 0;} coun++; }
-      break;
-    default:
-      //kill(get_pid(), SIGTERM);
-      break;
+    for ( int index = 0; index < this->inputPipes.size(); index ++){
+      FD_SET(this->inputPipes[index], &input);
+    }
+
+    int max_fd = (*std::max_element(this->inputPipes.begin(), this->inputPipes.end())) + 1;
+
+    while ( true ){
+        input_num = select(max_fd, &input, NULL, NULL, NULL);
+
+        for ( int index = 0; index < this->inputPipes.size(); index ++){
+          if (FD_ISSET(this->inputPipes[ index ], &input))
+            int c = read(this->inputPipes[ index ], data, MAX_BUFF);
+        }
+
+	//Parse data
+
+	//Change data to remove char of state
+
+	//Handle error if char is invalid
+
+	//Parse data to pass on to the next state
+    }
   }
+
+  if (this->pid == 1){}//Father Process, do nothing
 }
