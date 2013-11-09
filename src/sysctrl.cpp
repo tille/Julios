@@ -4,6 +4,11 @@ using namespace std;
 #include "shared.h"
 #include "parser/parser.h"
 
+#include <fcntl.h>   
+#include <unistd.h>
+#include <typeinfo>
+
+
 void build_graph(char *file){
   parser p;
 
@@ -19,15 +24,36 @@ void build_graph(char *file){
   ini = init[name];
   act = machines[name][ini]["a"];
   act = machines[name][act]["c"];
+ 
+  for(int index = 0; index < str_names.size(); index ++){
+    string name = str_names[index];
+    ini = init[name];
+    act = ini;
 
-  cout << act.get_name() << endl;
-  cout << "Es estado de fin: " << final[name][act] << endl;
-  act.run();
+    vector <string> visited;
+    visited.insert(visited.end(), act.get_name());
+    cout << name << "\n";
+   
+    while(1){
+      bool seted = false;
+      state next; 
+      for( map<string, state>::iterator stateIt = machines[name][act].begin(); stateIt != machines[name][act].end(); stateIt ++ ){
+	for(int index = 0; index < visited.size(); index++){
+	  bool isPresent = (find(visited.begin(), visited.end(), stateIt->second.get_name()) != visited.end());
+	  if((! isPresent) && seted ){
+                seted = true;
+		next = stateIt->second;
+                visited.insert(visited.end(), next.get_name());
+          }
+	}
+        
+        cout << stateIt->second.get_name() << "\n";
+      }
+       act = next;
+    }
+  } 
 }
 
-void createPipes(){
-	//Creates Pipes from delta function in map
-}
 
 void usage(const char* name) {
   cerr << "Usage: " << name << " <yamlfile>.yaml" << endl;
@@ -39,6 +65,9 @@ int main(int argc, char *argv[]) {
     usage(argv[0]);
  
   build_graph(argv[1]);
-  //while(1){}
+  while(1){
+    //Read comunication pipes
+    //Write pipes to process
+  }
   return 0;
 }

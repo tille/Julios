@@ -31,8 +31,8 @@ class state{
     void set_sys_pipe_in( int sysPipeIn );
     void set_sys_pipe_out( int sysPipeOut );
 
-    void append_input_pipe( int imputPipe );
-    void append_output_pipe( int outputPipe );
+    void append_input_pipe( string from, int imputPipe );
+    void append_output_pipe( string to, int outputPipe );
 
     pid_t get_pid();
     pid_t get_ppid(); 
@@ -43,8 +43,8 @@ class state{
     pid_t pid;
     string name;
     string description;
-    vector <int> inputPipes;
-    vector <int> outputPipes;
+    map <string, int> inputPipes;
+    map <string, int> outputPipes;
     int sysPipeOut, sysPipeIn;
     bool isStart, isFinal;
 };

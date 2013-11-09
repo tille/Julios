@@ -3,10 +3,13 @@
 #include <sys/types.h>
 #include <signal.h>
 
+using namespace std;
+
 state::state() { 
-  this->inputPipes = {};
-  this->outputPipes = {};
-  //run();
+  //cout << this->get_name() << "\n";
+  //this->inputPipes = {};
+  //this->outputPipes = {};
+  //this->run();
 }
 
 state::~state() { }
@@ -51,12 +54,20 @@ void state::set_sys_pipe_out( int sysPipeOut ){
   this->sysPipeOut = sysPipeOut;
 }
   
-void state::append_input_pipe( int inputPipe ){
-  this->inputPipes.insert(this->inputPipes.end(), inputPipe);
+void state::append_input_pipe( string from, int inputPipe ){
+
+  map<string, int>::iterator it = this->inputPipes.find(from);
+  
+  if(it == this->inputPipes.end())
+    this->inputPipes.insert( std::pair <string, int>( from, inputPipe ) );
 }
 
-void state::append_output_pipe( int outputPipe ){
-  this->outputPipes.insert(this->outputPipes.end() , outputPipe);
+void state::append_output_pipe( string to, int outputPipe ){
+
+  map<string, int>::iterator it = this->outputPipes.find(to);
+ 
+  if(it == this->outputPipes.end())
+    this->outputPipes.insert( std::pair <string, int>( to, outputPipe ) );
 }
   
 pid_t state::get_pid(){
@@ -68,39 +79,49 @@ pid_t state::get_ppid(){
 }
 
 void state::run(){
+
+  cout << this->get_name() << "\n";
+
   this->pid = fork();
  
-  if (this->pid == -1){}
+  if (this->pid == -1){cout << "Did not work";}
 
   if (this->pid == 0){//Child Process
+    cout << "meee....";
     int input_num = 0;
     char *data [MAX_BUFF];
     fd_set input;
     FD_ZERO(&input);
  
-    for ( int index = 0; index < this->inputPipes.size(); index ++){
-      FD_SET(this->inputPipes[index], &input);
+    for ( map<string, int>::iterator iter = this->inputPipes.begin(); iter != this->inputPipes.end(); iter ++){
+      FD_SET(iter->second, &input);
     }
 
-    int max_fd = (*std::max_element(this->inputPipes.begin(), this->inputPipes.end())) + 1;
+    map<string, int>::iterator it = this->inputPipes.begin();
+    map<string, int>::iterator end = this->inputPipes.end();
+
+    int max_value = it->second;
+    string str = it->first;
+    for( ; it != end; ++it) {
+      if(it->second > max_value) {
+        max_value = it->second;
+        str = it->first;
+      }
+    }
+
+    int max_fd = max_value + 1;
 
     while ( true ){
-        input_num = select(max_fd, &input, NULL, NULL, NULL);
-
-        for ( int index = 0; index < this->inputPipes.size(); index ++){
-          if (FD_ISSET(this->inputPipes[ index ], &input))
-            int c = read(this->inputPipes[ index ], data, MAX_BUFF);
-        }
-
-	//Parse data
-
-	//Change data to remove char of state
-
-	//Handle error if char is invalid
-
-	//Parse data to pass on to the next state
+      input_num = select(max_fd, &input, NULL, NULL, NULL);
+    
+      for ( map<string, int>::iterator iter = this->inputPipes.begin(); iter != this->inputPipes.end(); iter ++){
+        if ( FD_ISSET( iter->second, &input))
+	  int c = read( iter->second, data, MAX_BUFF);
+      }
     }
   }
 
-  if (this->pid == 1){}//Father Process, do nothing
+  if (this->pid == 1){
+    cout << "Well Fuck";
+  }//Father Process, do nothing
 }
